@@ -1,5 +1,4 @@
 import re
-import random
 from typing import List, Optional, Dict, Union
 from langchain_core.runnables import Runnable, RunnableConfig
 
@@ -9,6 +8,7 @@ from langsmith.schemas import Run
 
 from taxonomy_generator.state import Doc, State
 from taxonomy_generator.configuration import Configuration
+import secrets
 
 def load_chat_model(fully_specified_name: str) -> BaseChatModel:
     """Load a chat model from a fully specified name.
@@ -153,7 +153,7 @@ def process_runs(left: List[Doc], right: List[Union[Doc, Run]], sample: Optional
     converted = [r if isinstance(r, dict) else run_to_doc(r) for r in right if right]
 
     if sample is not None and sample < len(converted):
-        converted = random.sample(converted, sample)
+        converted = secrets.SystemRandom().sample(converted, sample)
 
     return left + converted
 

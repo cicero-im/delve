@@ -1,6 +1,4 @@
 """Node for reviewing and finalizing taxonomies."""
-
-import random
 from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableConfig
@@ -8,6 +6,7 @@ from langchain_core.runnables import RunnableConfig
 from taxonomy_generator.state import State
 from taxonomy_generator.utils import load_chat_model, parse_taxa, invoke_taxonomy_chain
 from taxonomy_generator.configuration import Configuration
+import secrets
 
 
 def _setup_review_chain(configuration: Configuration):
@@ -57,7 +56,7 @@ async def review_taxonomy(
     # Create random sample of documents
     batch_size = configuration.batch_size
     indices = list(range(len(state.documents)))
-    random.shuffle(indices)
+    secrets.SystemRandom().shuffle(indices)
     sample_indices = indices[:batch_size]
 
     # Review taxonomy using sampled documents
